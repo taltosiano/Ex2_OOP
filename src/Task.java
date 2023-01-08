@@ -1,50 +1,63 @@
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
-public class Task {
-    private static Object task;
+public class Task<V> implements Comparable<Task<V>>, Callable<V> {
+    private Callable<V> task;
     private static TaskType type; //סעיף 1
+//    private FutureTask<V> myvalue;
 
     public Task() { // default constructor
-        setType(TaskType.OTHER);
-        setTask("There is no task");
+        this.type = TaskType.OTHER;
     }
 
-    public static void createTask(Object task, TaskType type){ // סעיף 4
-        setTask(task);
-        setType(type);
-        // צריך לעשות שיהיה אפשר גם לא להכניס סוג משימה כי הגדרתי בבנאי דיפולט
+    public Task(Callable task, TaskType type) { // default constructor
+        this.task = task;
+        this.type = type;
     }
 
-    private static void setTask(Object task) {
-        Task.task = task;
+    public Task(Callable task) { // default constructor
+        this.task = task;
+        this.type = TaskType.OTHER;
     }
 
-    private static void setType(TaskType type) {
-        Task.type = type;
+    public static Task createTask(Callable task, TaskType type){
+        return new Task(task,type);
     }
 
-    public static Object getTask() {
-        return task;
+    public static Task createTask(Callable task){
+        return new Task(task);
     }
 
-    public static TaskType getType() {
-        return type;
-    }
-
-//    public boolean compare(Task other) { // סעיף 5
-//        return other.getType().equals(getType());
+//    public Callable<V> getTask() {
+//        return task;
+//    }
+//
+//    public void setTask(Callable<V> task) {
+//        this.task = task;
+//    }
+//
+//    public static TaskType getType() {
+//        return type;
+//    }
+//
+//    public static void setType(TaskType type) {
+//        Task.type = type;
 //    }
 
     public int compareTo(Task other) {
-        return other.getType().getPriorityValue() > getType().getPriorityValue() ? 1 : -1;
-    }
-    public static void runTask(){ // סעיף 2
-        try{  // לא הבנתי איך מבצעים את המשימה
-
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        return other.type.getPriorityValue() > type.getPriorityValue() ? 1 : -1;
     }
 
-    // סעיף 3 עם פקטורי לא הבנתי מה לעשות
+    @Override
+    public V call() throws Exception {
+        return task.call();
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "task=" + task +
+                "type=" + type +
+                '}';
+    }
 }
