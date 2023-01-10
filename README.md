@@ -7,8 +7,7 @@
 
 ### you can clone our repositorty here :point_down: :slightly_smiling_face:	:point_down: 
 ```
-https://github.com/taltosiano/Ex2.OOP.git
-
+https://github.com/taltosiano/Ex2_OOP.git
 ```
 
 ### Our project in divided for two parts. In the first part we had to create several files with a random number of lines, and then count the total number of lines in three ways: 
