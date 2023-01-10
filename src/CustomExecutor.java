@@ -3,6 +3,7 @@ import java.util.concurrent.*;
 import static java.lang.Runtime.getRuntime;
 
 public class CustomExecutor<V> extends ThreadPoolExecutor {
+    private boolean isActive;
     int [] thePriority;
     int minNumOfThreads = getRuntime().availableProcessors()/2;
     int maxNumOfThreads = getRuntime().availableProcessors() - 1;
@@ -11,6 +12,7 @@ public class CustomExecutor<V> extends ThreadPoolExecutor {
     public CustomExecutor() {
         super(getRuntime().availableProcessors()/2, getRuntime().availableProcessors() - 1, 300, TimeUnit.MILLISECONDS,
                 new PriorityBlockingQueue<>(getRuntime().availableProcessors()/2, (task1, task2) -> ((Task)task1).compareTo((Task) task2)));
+        this.isActive = true;
         this.thePriority = new int[10];
     }
 
@@ -37,39 +39,53 @@ public class CustomExecutor<V> extends ThreadPoolExecutor {
 //        return submit(task);
 //    }
 
-    public Future<V> submit (Task t)
-    {
-        thePriority[t.type.getPriorityValue()]++;
-        return super.submit(t);
+    public Future<V> submit (Task t) {
+        if (isActive) {
+            thePriority[t.getType().getPriorityValue()]++;
+            return super.submit(t);}
+        return null;
     }
 
     public  Future<V> submit (Callable t , TaskType taskType)
     {
-        Callable task = Task.createTask(t,taskType);
-        return submit(task);
+        if (t != null && isActive) {
+            Callable task = Task.createTask(t,taskType);
+            return submit(task);}
+        return null;
     }
 
-    public Future<V> submit (Callable t)
-    {
-        Callable task = Task.createTask(t);
-        return submit((Task)task);
+    public Future<V> submit (Callable t) {
+        if (t != null && isActive) {
+            Callable task = Task.createTask(t);
+            return submit((Task)task);}
+        return null;
     }
 
-//    public String getCurrentMax() {
+    //    public String getCurrentMax() {
 //        return "Current maximum priority =" + max;
 //    }
-public int getCurrentMax()
-{
+    public int getCurrentMax()
+    {
         for (int i = 1; i < 10; i++) {
             if (thePriority[i] > 0)
                 return i;
         }
-    return 0;
-}
+        return 0;
+    }
 
     public void gracefullyTerminate() {
-        super.shutdown();
-    }
+        if(isActive) {
+            isActive = false;
+            super.shutdown();
+            try {
+                if(!super.awaitTermination(300L *(getQueue().size()) , TimeUnit.MILLISECONDS)){
+                    super.awaitTermination(300L *(getQueue().size() + 4) , TimeUnit.MILLISECONDS);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                System.err.println("exception while determination");
+            }
+        }    }
 
     @Override
     protected void beforeExecute(Thread t, Runnable r) {
