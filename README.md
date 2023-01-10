@@ -3,7 +3,7 @@
 ## Created By 
 |Tal Tosiano |  208846600 | 
 | ------------ | ------------ | 
-| Tair Mazriv |  | 
+| Tair Mazriv | 209188382 | 
 
 ### you can clone our repositorty here :point_down: :slightly_smiling_face:	:point_down: 
 ```
@@ -20,7 +20,7 @@ In the second part
 
 ## UML diagram Part I
 
-
+<img width="522" alt="image" src="https://user-images.githubusercontent.com/94299489/211607485-bc996dc5-fc4f-445d-ba49-f7c9f5de91f9.png">
 
 
 ## The results of this Part
