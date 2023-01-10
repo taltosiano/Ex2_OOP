@@ -58,7 +58,11 @@ result for the parameters - numOfFiles: 3000,  seed: bound: 10000
 
 result for the parameters - numOfFiles: 10000,  seed: (int) Math.random(),  bound: 1000
 
+result for the parameters - numOfFiles: 10000,  seed: (int) Math.random(),  bound: 10000
+![image](https://user-images.githubusercontent.com/121244682/211611511-ee42b202-5cc7-446d-9055-dc336a49ab68.png)
+
 result for the parameters - numOfFiles: 10000,  seed: (int) Math.random(),  bound: 100000
+
 
 
 
