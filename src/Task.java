@@ -33,11 +33,6 @@ public class Task<V> implements Comparable<Task<V>>, Callable<V> {
         return task;
     }
 
-    public int getPriority(){
-        if (type.getType() == COMPUTATIONAL) return 1;
-        if (type.getType() == IO) return 2;
-        else return 3;
-    }
     public static Task createTask(Callable task, TaskType type){
         return new Task(task,type);
     }

@@ -67,7 +67,7 @@ public class CustomExecutor<V> extends ThreadPoolExecutor {
     {
         if (t != null && isActive) {
             Task<V> task = Task.createTask(t,taskType);
-            return (Future<V>) submit((Task<V>) task);
+            return submit(task);
         }
         return null;
     }
