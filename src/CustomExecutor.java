@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.concurrent.*;
 
 import static java.lang.Runtime.getRuntime;
@@ -10,8 +11,10 @@ public class CustomExecutor<V> extends ThreadPoolExecutor {
     private final PriorityBlockingQueue<Runnable> tasks = new PriorityBlockingQueue<>(minNumOfThreads, (task1, task2) -> ((Task)task1).compareTo((Task) task2)) ;
 
     public CustomExecutor() {
+//        super(getRuntime().availableProcessors()/2, getRuntime().availableProcessors() - 1, 300, TimeUnit.MILLISECONDS,
+//                new PriorityBlockingQueue<>(getRuntime().availableProcessors()/2, (task1, task2) -> ((Task)task1).compareTo((Task) task2)));
         super(getRuntime().availableProcessors()/2, getRuntime().availableProcessors() - 1, 300, TimeUnit.MILLISECONDS,
-                new PriorityBlockingQueue<>(getRuntime().availableProcessors()/2, (task1, task2) -> ((Task)task1).compareTo((Task) task2)));
+                new PriorityBlockingQueue<>(getRuntime().availableProcessors() / 2, Comparator.comparing(runnable -> ((MyFuture) runnable))));
         this.isActive = true;
         this.thePriority = new int[10];
     }

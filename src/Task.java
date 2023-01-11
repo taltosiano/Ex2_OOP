@@ -24,6 +24,10 @@ public class Task<V> implements Comparable<Task<V>>, Callable<V> {
         return type;
     }
 
+    public Callable<V> getTask() {
+        return task;
+    }
+
     public int compareTo(Task other) {
 //        return other.type.getPriorityValue() > type.getPriorityValue() ? 1 : -1;
         int ans = 0;
