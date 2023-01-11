@@ -1,3 +1,5 @@
+package Ex2_2;
+
 import java.util.Comparator;
 import java.util.concurrent.*;
 
@@ -6,61 +8,74 @@ import static java.lang.Runtime.getRuntime;
 public class CustomExecutor<V> extends ThreadPoolExecutor {
     private boolean isActive;
     int [] thePriority;
-    int minNumOfThreads = getRuntime().availableProcessors()/2;
-    int maxNumOfThreads = getRuntime().availableProcessors() - 1;
-    private final PriorityBlockingQueue<Runnable> tasks = new PriorityBlockingQueue<>(minNumOfThreads, (task1, task2) -> ((Task)task1).compareTo((Task) task2)) ;
+//    int minNumOfThreads = getRuntime().availableProcessors()/2;
+//    int maxNumOfThreads = getRuntime().availableProcessors() - 1;
+//    private final PriorityBlockingQueue<Runnable> tasks = new PriorityBlockingQueue<>(minNumOfThreads, (task1, task2) -> ((MyFuture)task1).compareTo((MyFuture) task2)) ;
 
     public CustomExecutor() {
+        super(Runtime.getRuntime().availableProcessors()/2,
+                Runtime.getRuntime().availableProcessors() - 1, 300, TimeUnit.MILLISECONDS,
+                new PriorityBlockingQueue<>(100, (task1, task2) -> ((MyFuture)task1).compareTo((MyFuture)task2)));
 //        super(getRuntime().availableProcessors()/2, getRuntime().availableProcessors() - 1, 300, TimeUnit.MILLISECONDS,
-//                new PriorityBlockingQueue<>(getRuntime().availableProcessors()/2, (task1, task2) -> ((Task)task1).compareTo((Task) task2)));
-        super(getRuntime().availableProcessors()/2, getRuntime().availableProcessors() - 1, 300, TimeUnit.MILLISECONDS,
-                new PriorityBlockingQueue<>(getRuntime().availableProcessors() / 2, Comparator.comparing(runnable -> ((MyFuture) runnable))));
-        this.isActive = true;
+//                new PriorityBlockingQueue<>(getRuntime().availableProcessors() / 2, Comparator.comparing(runnable -> ((MyFuture) runnable))));
         this.thePriority = new int[10];
+        for (int i = 0; i < 10; i++){
+            thePriority[i] = 0;
+        }
+        this.isActive = true;
     }
 
-//    public void submit(Callable task, TaskType type) {
-//        Task currTask = new Task();
+    public boolean isActive() {
+        return isActive;
+    }
+
+    //    public void submit(Callable task, Ex2_2.TaskType type) {
+//        Ex2_2.Task currTask = new Ex2_2.Task();
 //        currTask.createTask(task, type);
 //        tasks.add(currTask);
 //    }
 //
 //    public void submit(Callable task) {
-//        Task currTask = new Task();
+//        Ex2_2.Task currTask = new Ex2_2.Task();
 //        currTask.createTask(task);
 //        tasks.add(currTask);
 //    }
 
-//    public Future<V> submit(Task<V> task) {
+//    public Future<V> submit(Ex2_2.Task<V> task) {
 //        FutureTask futureTask = new FutureTask(task);
 //        tasks.add(futureTask);
 //        return futureTask;
 //    }
 //
-//    public Future<V> submit(Callable<V> callable, TaskType type) {
-//        Task<V> task = Task.createTask(callable, type);
+//    public Future<V> submit(Callable<V> callable, Ex2_2.TaskType type) {
+//        Ex2_2.Task<V> task = Ex2_2.Task.createTask(callable, type);
 //        return submit(task);
 //    }
 
-    public Future<V> submit (Task t) {
-        if (isActive) {
+    public Future<V> submit (Task<V> t) {
+        if (t != null && isActive) {
             thePriority[t.getType().getPriorityValue()]++;
-            return super.submit(t);}
+        //    MyFuture myFuture = new MyFuture(t);
+            MyFuture<V> myFut = new MyFuture<>(t);
+            super.execute(myFut);
+            return myFut;
+        }
         return null;
     }
 
-    public  Future<V> submit (Callable t , TaskType taskType)
+    public  Future<V> submit (Callable<V> t , TaskType taskType)
     {
         if (t != null && isActive) {
-            Callable task = Task.createTask(t,taskType);
-            return submit(task);}
+            Task<V> task = Task.createTask(t,taskType);
+            return (Future<V>) submit((Task<V>) task);
+        }
         return null;
     }
 
     public Future<V> submit (Callable t) {
         if (t != null && isActive) {
-            Callable task = Task.createTask(t);
-            return submit((Task)task);}
+            Task task = Task.createTask(t);
+            return submit(task);}
         return null;
     }
 
@@ -70,7 +85,7 @@ public class CustomExecutor<V> extends ThreadPoolExecutor {
     public int getCurrentMax()
     {
         for (int i = 1; i < 10; i++) {
-            if (thePriority[i] > 0)
+            if (thePriority[i] != 0)
                 return i;
         }
         return 0;
