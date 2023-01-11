@@ -1,27 +1,17 @@
 package Ex2_2;
 
-import java.util.Comparator;
 import java.util.concurrent.*;
-
-import static java.lang.Runtime.getRuntime;
 
 public class CustomExecutor<V> extends ThreadPoolExecutor {
     private boolean isActive;
-    int [] thePriority;
-//    int minNumOfThreads = getRuntime().availableProcessors()/2;
-//    int maxNumOfThreads = getRuntime().availableProcessors() - 1;
-//    private final PriorityBlockingQueue<Runnable> tasks = new PriorityBlockingQueue<>(minNumOfThreads, (task1, task2) -> ((MyFuture)task1).compareTo((MyFuture) task2)) ;
+    private int[] MaxPriorityArray = {-1, 0, 0, 0};
+    private final int MaxPriority = 0;
+    public static int numOfCores = Runtime.getRuntime().availableProcessors();
 
     public CustomExecutor() {
-        super(Runtime.getRuntime().availableProcessors()/2,
-                Runtime.getRuntime().availableProcessors() - 1, 300, TimeUnit.MILLISECONDS,
+        super(numOfCores/2,
+                numOfCores - 1, 300, TimeUnit.MILLISECONDS,
                 new PriorityBlockingQueue<>(100, (task1, task2) -> ((MyFuture)task1).compareTo((MyFuture)task2)));
-//        super(getRuntime().availableProcessors()/2, getRuntime().availableProcessors() - 1, 300, TimeUnit.MILLISECONDS,
-//                new PriorityBlockingQueue<>(getRuntime().availableProcessors() / 2, Comparator.comparing(runnable -> ((MyFuture) runnable))));
-        this.thePriority = new int[10];
-        for (int i = 0; i < 10; i++){
-            thePriority[i] = 0;
-        }
         this.isActive = true;
     }
 
@@ -54,8 +44,7 @@ public class CustomExecutor<V> extends ThreadPoolExecutor {
 
     public Future<V> submit (Task<V> t) {
         if (t != null && isActive) {
-            thePriority[t.getType().getPriorityValue()]++;
-        //    MyFuture myFuture = new MyFuture(t);
+            MaxPriorityArray[t.getType().getPriorityValue()]++;
             MyFuture<V> myFut = new MyFuture<>(t);
             super.execute(myFut);
             return myFut;
@@ -63,7 +52,7 @@ public class CustomExecutor<V> extends ThreadPoolExecutor {
         return null;
     }
 
-    public  Future<V> submit (Callable<V> t , TaskType taskType)
+    public Future<V> submit (Callable<V> t , TaskType taskType)
     {
         if (t != null && isActive) {
             Task<V> task = Task.createTask(t,taskType);
@@ -79,16 +68,17 @@ public class CustomExecutor<V> extends ThreadPoolExecutor {
         return null;
     }
 
-    //    public String getCurrentMax() {
-//        return "Current maximum priority =" + max;
-//    }
-    public int getCurrentMax()
-    {
-        for (int i = 1; i < 10; i++) {
-            if (thePriority[i] != 0)
-                return i;
+    public int getCurrentMax() {
+        boolean findAns = false;
+        int ans = 3;
+        for (int i = 3; i >= 1; i--) {
+            if(MaxPriorityArray[i] > 0) {
+                ans = i;
+                findAns = true;
+            }
         }
-        return 0;
+        if (findAns) return ans;
+        return MaxPriority;
     }
 
     public void gracefullyTerminate() {
@@ -107,12 +97,14 @@ public class CustomExecutor<V> extends ThreadPoolExecutor {
 
     @Override
     protected void beforeExecute(Thread t, Runnable r) {
-        boolean exist=false;
-        for(int i=0; i < thePriority.length && !exist; i++){
-            if(thePriority[i]>0){
-                thePriority[i]= thePriority[i]-1;
-                exist =true;
-            }
-        }
+//        boolean exist=false;
+//        for(int i=0; i < thePriority.length && !exist; i++){
+//            if(thePriority[i]>0){
+//                thePriority[i]= thePriority[i]-1;
+//                exist =true;
+//            }
+//        }
+        if(r != null)  MaxPriorityArray[((MyFuture) r).getPriority()]--;
+
     }
 }

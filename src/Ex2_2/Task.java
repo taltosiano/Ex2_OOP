@@ -1,15 +1,10 @@
 package Ex2_2;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
-
-import static Ex2_2.TaskType.COMPUTATIONAL;
-import static Ex2_2.TaskType.IO;
 
 public class Task<V> implements Comparable<Task<V>>, Callable<V> {
     private Callable<V> task;
-     static TaskType type; //סעיף 1
-//    private FutureTask<V> myvalue;
+    private TaskType type;
 
     public Task() { // default constructor
         this.type = TaskType.OTHER;
@@ -25,7 +20,7 @@ public class Task<V> implements Comparable<Task<V>>, Callable<V> {
         this.type = TaskType.OTHER;
     }
 
-    public static TaskType getType() {
+    public TaskType getType() {
         return type;
     }
 
@@ -41,27 +36,14 @@ public class Task<V> implements Comparable<Task<V>>, Callable<V> {
         return new Task(task);
     }
 
-//    public Callable<V> getTask() {
-//        return task;
-//    }
-//
-//    public void setTask(Callable<V> task) {
-//        this.task = task;
-//    }
-//
-//    public static Ex2_2.TaskType getType() {
-//        return type;
-//    }
-//
-//    public static void setType(Ex2_2.TaskType type) {
-//        Ex2_2.Task.type = type;
-//    }
-
     public int compareTo(Task other) {
-        return other.type.getPriorityValue() > type.getPriorityValue() ? 1 : -1;
+        int ans = 0;
+        if(other.type.getPriorityValue() > type.getPriorityValue())
+            ans = 1;
+        else if(other.type.getPriorityValue() < type.getPriorityValue())
+            ans = -1;
+        return  ans;
     }
-
-
 
     @Override
     public V call() throws Exception {
@@ -70,9 +52,6 @@ public class Task<V> implements Comparable<Task<V>>, Callable<V> {
 
     @Override
     public String toString() {
-        return "Ex2_2.Task{" +
-                "task=" + task +
-                "type=" + type +
-                '}';
+        return "Task{" + "task=" + task + "type=" + type + '}';
     }
 }
