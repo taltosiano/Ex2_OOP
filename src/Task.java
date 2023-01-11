@@ -1,10 +1,18 @@
+package Ex2_2;
+
 import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+
+import static Ex2_2.TaskType.COMPUTATIONAL;
+import static Ex2_2.TaskType.IO;
 
 public class Task<V> implements Comparable<Task<V>>, Callable<V> {
     private Callable<V> task;
-    private TaskType type;
+     static TaskType type; //סעיף 1
+//    private FutureTask<V> myvalue;
 
     public Task() { // default constructor
+        this.type = TaskType.OTHER;
     }
 
     public Task(Callable task, TaskType type) { // default constructor
@@ -12,15 +20,12 @@ public class Task<V> implements Comparable<Task<V>>, Callable<V> {
         this.type = type;
     }
 
-    public static Task createTask(Callable task, TaskType type){
-        return new Task(task,type);
+    public Task(Callable task) { // default constructor
+        this.task = task;
+        this.type = TaskType.OTHER;
     }
 
-    public static Task createTask(Callable task){
-        return new Task(task, TaskType.OTHER);
-    }
-
-    public TaskType getType() {
+    public static TaskType getType() {
         return type;
     }
 
@@ -28,15 +33,40 @@ public class Task<V> implements Comparable<Task<V>>, Callable<V> {
         return task;
     }
 
-    public int compareTo(Task other) {
-//        return other.type.getPriorityValue() > type.getPriorityValue() ? 1 : -1;
-        int ans = 0;
-        if (other.type.getPriorityValue() > type.getPriorityValue())
-            ans = 1;
-        else if(other.type.getPriorityValue() < type.getPriorityValue())
-            ans = -1;
-        return  ans;
+    public int getPriority(){
+        if (type.getType() == COMPUTATIONAL) return 1;
+        if (type.getType() == IO) return 2;
+        else return 3;
     }
+    public static Task createTask(Callable task, TaskType type){
+        return new Task(task,type);
+    }
+
+    public static Task createTask(Callable task){
+        return new Task(task);
+    }
+
+//    public Callable<V> getTask() {
+//        return task;
+//    }
+//
+//    public void setTask(Callable<V> task) {
+//        this.task = task;
+//    }
+//
+//    public static Ex2_2.TaskType getType() {
+//        return type;
+//    }
+//
+//    public static void setType(Ex2_2.TaskType type) {
+//        Ex2_2.Task.type = type;
+//    }
+
+    public int compareTo(Task other) {
+        return other.type.getPriorityValue() > type.getPriorityValue() ? 1 : -1;
+    }
+
+
 
     @Override
     public V call() throws Exception {
@@ -45,7 +75,7 @@ public class Task<V> implements Comparable<Task<V>>, Callable<V> {
 
     @Override
     public String toString() {
-        return "Task{" +
+        return "Ex2_2.Task{" +
                 "task=" + task +
                 "type=" + type +
                 '}';
