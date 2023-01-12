@@ -15,8 +15,13 @@ https://github.com/taltosiano/Ex2_OOP.git
 2. Count using threads
 3. Count using a threadPool
 
-In the second part 
+## classes
 
+### Ex2_1
+
+### NumOfLinesThreads
+
+### NumOfLinesThreadPool
 
 ## UML diagram Part I
 
@@ -65,11 +70,31 @@ result for the parameters - numOfFiles: 10000,  seed: (int) Math.random(),  boun
 result for the parameters - numOfFiles: 10000,  seed: (int) Math.random(),  bound: 100000
 ![image](https://user-images.githubusercontent.com/121244682/211616879-71b70caf-c6d1-4abb-b8ba-959a6cac9cc4.png)
 
+### In the second part of the project we made a new type that provides an asynchronous task with priority and a type of ThreadPool that supports tasks priority.
 
+## classes
 
+### Task
+The class represents an operation that can be run asynchronously and can return a value of some type - so we will define it as a type
+Generic return. It is not necessary for the operation to succeed and in case of failure, an exception will be thrown.
 
+### TaskType
+The class is an enum that describes the task type (COMPUTATIONAL/IO/OTHER) and its priority based on the value
+The number of the task type.
 
+### CustomExecutor
+The class represents a new ThreadPool type that supports a queue of priority tasks. Each task in the queue is of type Task. 
+CustomExecutor will create a Task before putting it in the queue by passing <V<Callable and
+enum of type TaskType.
+CustomExecutor will execute the tasks according to their priority.
 
+### MyFuture
+The purpose of the department is to coordinate between 2 departments. The class extends the FutureTask class and implements the Comparable interface.
+The class allow the Task objects to be used as elements in the priority queue which used by the thread pool.
+The task objects are passed to the submit method of the CustomExecutor class.
+                                                                                       
+### Tests
+As in every test department, here we checked the correctness of all the functions in the classes.
 
 ## UML diagram Part II
 
