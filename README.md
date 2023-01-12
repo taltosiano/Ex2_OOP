@@ -74,6 +74,8 @@ result for the parameters - numOfFiles: 10000,  seed: (int) Math.random(),  boun
 result for the parameters - numOfFiles: 10000,  seed: (int) Math.random(),  bound: 100000
 ![image](https://user-images.githubusercontent.com/121244682/211616879-71b70caf-c6d1-4abb-b8ba-959a6cac9cc4.png)
 
+### *************************************************************************************************************
+
 ### In the second part of the project we made a new type that provides an asynchronous task with priority and a type of ThreadPool that supports tasks priority.
 
 ## classes
