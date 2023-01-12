@@ -13,7 +13,7 @@ public class Ex2_1 {
 
     public static void main(String[] args) {
 
-        String[] fileNames = createTextFiles(12, (int) Math.random(), 10);
+        String[] fileNames = createTextFiles(3000, (int) Math.random(), 100);
 
         System.out.print("Total number of lines without thread: ");
         long startTime = System.currentTimeMillis();
@@ -34,7 +34,13 @@ public class Ex2_1 {
         endTime = System.currentTimeMillis();System.out.print("Time: " + formatter.format((endTime - startTime) / 1000d) + " seconds" + "\n");
     }
 
-
+    /**
+     * This method creates text files with a random number of lines
+     * @param n - amount of files we want to create
+     * @param seed - random number generator using a single long seed.
+     * @param bound - a pseudorandom, uniformly distributed int value between 0 (inclusive) and the specified value (exclusive).
+     * @return
+     */
     public static String[] createTextFiles(int n, int seed, int bound) {  // n files,
         Random rand = new Random(seed);
         String[] file_names = new String[n];      // Initializing a String array that will be returned with size of: number of files.
@@ -63,6 +69,11 @@ public class Ex2_1 {
         return file_names;
     }
 
+    /**
+     * The function calculates the total number of lines in the files we created without using threads.
+     * @param fileNames - The function receive files array we created.
+     * @return The total number of lines of all files
+     */
     public static int getNumOfLines(String[] fileNames) {
         int ans = 0;
         for (int i=0; i < fileNames.length; i++) {
@@ -84,41 +95,36 @@ public class Ex2_1 {
         return ans;
     }
 
+    /**
+     * The function calculates the total number of lines in the files we created with using threads.
+     * @param fileNames - The function receive files array we created.
+     * @return The total number of lines of all files
+     */
     public static int getNumOfLinesThreads(String[] fileNames) {
-        //  Ex2_1.NumOfLinesThreads thread = new Ex2_1.NumOfLinesThreads(fileNames.toString());
         NumOfLinesThreads[] threads = new NumOfLinesThreads[fileNames.length];
         int numOfLines = 0;
-        try {
             for (int i = 0; i < fileNames.length; i++) {
                 threads[i] = new NumOfLinesThreads(fileNames[i]);
                 threads[i].start();
-                threads[i].join();
             }
             for (NumOfLinesThreads thread : threads) {
-                numOfLines += thread.getNumRows();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+                try {
+                    thread.join();
+                    numOfLines += thread.getNumRows();
 
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         return numOfLines;
     }
 
-//        int counter = 0;
-//        for (int i = 0; i < fileNames.length; i++) {
-//            Ex2_1.NumOfLinesThreads l = new Ex2_1.NumOfLinesThreads(fileNames[i]);
-//            l.start();
-//            try {
-//                l.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            counter += l.getNumRows();
-//        }
-//
-//        return counter;
-//    }
-
+    /**
+     * The function calculates the total number of lines in the files we created with using threadPool.
+     * @param fileNames - The function receive files array we created.
+     * @return The total number of lines of all files
+     */
     public static int getNumOfLinesThreadPool(String[] fileNames) {
         ExecutorService executorService = Executors.newFixedThreadPool(fileNames.length);
         List<Callable<Integer>> tasks = new ArrayList<>();
