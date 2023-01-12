@@ -11,9 +11,10 @@ import java.util.concurrent.*;
 
 public class Ex2_1 {
 
+    // Here we check the correctness of the functions and their running time in relation to the parameters
     public static void main(String[] args) {
 
-        String[] fileNames = createTextFiles(3000, (int) Math.random(), 100);
+        String[] fileNames = createTextFiles(100, (int) Math.random(), 55555);
 
         System.out.print("Total number of lines without thread: ");
         long startTime = System.currentTimeMillis();
