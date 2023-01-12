@@ -18,10 +18,14 @@ https://github.com/taltosiano/Ex2_OOP.git
 ## classes
 
 ### Ex2_1
+The main class of this part. It's contain 4 function - the first is creats a files, And the other three functions calculate the total number of lines of all the files in other forms as explained above.
 
 ### NumOfLinesThreads
+A class that inherits from the Thread class has a constructor that accepts the name of the file and a run function that calculates the number of lines of this file.
 
 ### NumOfLinesThreadPool
+A helper class that implements the Callable interface, returns a method
+call calculates the number of lines of one file.
 
 ## UML diagram Part I
 
@@ -97,4 +101,6 @@ The task objects are passed to the submit method of the CustomExecutor class.
 As in every test department, here we checked the correctness of all the functions in the classes.
 
 ## UML diagram Part II
+<img width="605" alt="image" src="https://user-images.githubusercontent.com/94299489/212065871-3c020296-2bb5-4fea-b119-81f7322d3456.png">
+
 
