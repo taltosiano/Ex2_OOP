@@ -10,6 +10,19 @@ import static java.lang.Thread.sleep;
 import static org.junit.Assert.*;
 
 class Tests {
+    Callable<String> callable = ()-> {
+        StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+      //  sleep(1000);
+        return sb.reverse().toString();
+    };
+
+    Callable<Integer> callable2 = () -> {
+        int sum = 0;
+        for (int i = 1; i <= 10; i++) {
+            sum += i;
+        }
+        return sum;            };
+
     public static final Logger logger = LoggerFactory.getLogger(Tests.class);
     @Test
     public void partialTest(){
@@ -32,16 +45,12 @@ class Tests {
         Callable<Double> callable1 = ()-> {
             return 1000 * Math.pow(1.02, 5);
         };
-        Callable<String> callable2 = ()-> {
-            StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-            sleep(1000);
-            return sb.reverse().toString();
-        };
+
         // var is used to infer the declared type automatically
         Future priceTask = customExecutor.submit(()-> {
             return 1000 * Math.pow(1.02, 5);
         }, TaskType.COMPUTATIONAL);
-        Future reverseTask = customExecutor.submit(callable2, TaskType.IO);
+        Future reverseTask = customExecutor.submit(callable, TaskType.IO);
         final Double totalPrice;
         final String reversed;
         try {
@@ -60,23 +69,6 @@ class Tests {
 
     @Test
     void TestTaskConstructors(){
-        Callable<String> callable = new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-                sleep(1000);
-                return sb.reverse().toString();            }
-        };
-
-        Callable<Integer> callable2 = new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                int sum = 0;
-                for (int i = 1; i <= 10; i++) {
-                    sum += i;
-                }
-                return sum;            }
-        };
 
         Task<String> task1 = Task.createTask(callable);
         Task<String> task2 = Task.createTask(callable2,TaskType.COMPUTATIONAL);
@@ -87,37 +79,15 @@ class Tests {
 
     @Test
     void TestTaskCall() throws Exception {
-        Callable<String> callable = new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                    StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-                    sleep(1000);
-                    return sb.reverse().toString();            }
-        };
+
         Task<String> task1 = Task.createTask(callable);
         assertEquals("ZYXWVUTSRQPONMLKJIHGFEDCBA", task1.call());
     }
 
     @Test
     void TestTaskCompare(){
-        Callable<String> callable = new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-                sleep(1000);
-                return sb.reverse().toString();             }
-        };
+
         Task<String> task1 = Task.createTask(callable);
-        Callable<Integer> callable2 = new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                int sum = 0;
-                for (int i = 1; i <= 10; i++) {
-                    sum += i;
-                }
-                return sum;
-            }
-        };
         Task<String> task2 = Task.createTask(callable2,TaskType.IO);
         Task<String> task3 = Task.createTask(callable2,TaskType.COMPUTATIONAL);
         Task<String> task4 = Task.createTask(callable2,TaskType.OTHER);
@@ -126,37 +96,36 @@ class Tests {
         assertEquals(1,task3.compareTo(task1));
         assertEquals(-1,task2.compareTo(task3));
 
-
     }
 
     //CustomExecutor Tests:
     @Test
     void customExecutor_submit(){
-        Callable<String> callable = new Callable<String>() {
+        Callable<String> callable3 = new Callable<String>() {
             @Override
             public String call() throws Exception {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
                 return "Hello World";
             }
         };
 
-        Task<String> task1 = Task.createTask(callable,TaskType.IO);
+        Task<String> task1 = Task.createTask(callable2,TaskType.IO);
         CustomExecutor<String> customExecutor = new CustomExecutor<>();
         assertNotNull(customExecutor.submit(task1));
-        assertNotNull(customExecutor.submit(callable));
-        assertNotNull(customExecutor.submit(callable,TaskType.COMPUTATIONAL));
+        assertNotNull(customExecutor.submit(callable3));
+        assertNotNull(customExecutor.submit(callable3,TaskType.COMPUTATIONAL));
         assertNull(customExecutor.submit((Task<String>) null));
 
     }
 
     @Test
     void TestGetMax() {
-        Task<Integer> task1 = Task.createTask(() -> {
-            Thread.sleep(1000);
+        Task task1 = Task.createTask(() -> {
+            sleep(1000);
             return 1;
         }, TaskType.COMPUTATIONAL);
-        Task<Integer> task2 = Task.createTask(() -> {
-            Thread.sleep(1000);
+        Task task2 = Task.createTask(() -> {
+            sleep(1000);
             return 1;
         }, TaskType.IO);
         Task<Integer> task3 = Task.createTask(() -> {
@@ -199,7 +168,6 @@ class Tests {
         int answer = 0;
         try {
             answer = future1.get() + future2.get() + future3.get();
-            Thread.sleep(3000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
@@ -229,6 +197,5 @@ class Tests {
         assertEquals(50,customExecutor.getCompletedTaskCount());
         assertEquals(true,customExecutor.isTerminated());
     }
-
-
 }
+
