@@ -45,22 +45,22 @@ In big required for most:
 3. The function with the third pool will be extremely fast
 
 result for the parameters - numOfFiles: 10,  seed: (int) Math.random(),  bound: 10
-<img width="529" alt="image" src="https://user-images.githubusercontent.com/94299489/211553019-4ae08019-bfc6-43b2-90ad-7fa11f825bbe.png">
+<img width="521" alt="image" src="https://user-images.githubusercontent.com/94299489/212277167-d8db49e7-00fa-47f2-8056-11c8a186e6b6.png">
 
 result for the parameters - numOfFiles: 100,  seed: (int) Math.random(),  bound: 10
-<img width="545" alt="image" src="https://user-images.githubusercontent.com/94299489/211552920-bdd470b4-c632-404c-9df6-9f84bfbd32ec.png">
+<img width="525" alt="image" src="https://user-images.githubusercontent.com/94299489/212277249-7f91879e-152b-44aa-8f2b-9f2ef547d04f.png">
 
 result for the parameters - numOfFiles: 100,   seed: (int) Math.random(),  bound: 100
-<img width="537" alt="image" src="https://user-images.githubusercontent.com/94299489/211553092-05298bec-15ba-477c-bc58-750a4f22168d.png">
+<img width="538" alt="image" src="https://user-images.githubusercontent.com/94299489/212277391-de5f16ef-f8d3-46cb-a4a0-2f9b498f7ad7.png">
 
 result for the parameters - numOfFiles: 100,  seed: (int) Math.random(),  bound: 1000
-<img width="546" alt="image" src="https://user-images.githubusercontent.com/94299489/211553328-0407d1e0-d147-4f03-a017-f50473ae2e10.png">
+<img width="552" alt="image" src="https://user-images.githubusercontent.com/94299489/212277470-519c683f-e775-4afa-8e9f-4c5c5a54c70e.png">
 
-result for the parameters - numOfFiles: 1000,  seed: (int) Math.random(), bound: 100
-<img width="546" alt="image" src="https://user-images.githubusercontent.com/94299489/211553456-adc25c78-9a0e-47a3-8e8b-df08364b5ab0.png">
+result for the parameters - numOfFiles: 1000,  seed: (int) Math.random(), bound: 1000
+<img width="560" alt="image" src="https://user-images.githubusercontent.com/94299489/212277715-5e49d9f8-adeb-452c-afa2-dba884103cbf.png">
 
 result for the parameters - numOfFiles: 1000,  seed: (int) Math.random(), bound: 100000
-<img width="571" alt="image" src="https://user-images.githubusercontent.com/94299489/211553694-66befa81-8f3f-4c12-8773-94429ae9630c.png">
+<img width="567" alt="image" src="https://user-images.githubusercontent.com/94299489/212277914-101a4a42-8304-4403-8830-c5a0809d3704.png">
 
 result for the parameters - numOfFiles: 3000,  seed: bound: 10000
 <img width="584" alt="image" src="https://user-images.githubusercontent.com/94299489/211554203-da821c3b-ad31-4bfb-b3b4-521ddd8c3178.png">
