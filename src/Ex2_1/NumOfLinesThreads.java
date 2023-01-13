@@ -36,8 +36,4 @@ public class NumOfLinesThreads extends Thread {
         }
     }
 
-    public int getCount() {
-        return numRows;
-    }
-
 }
